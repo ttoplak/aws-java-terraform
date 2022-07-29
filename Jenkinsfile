@@ -56,6 +56,7 @@ pipeline {
         stage('E2E test deployed code') {
             steps {
                 echo '=== E2E testing AWS code ==='
+                bat 'npm install -g newman'
                 bat 'newman run AWS_Playground.postman_collection.json'
             }
         }
