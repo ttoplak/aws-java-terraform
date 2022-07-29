@@ -11,6 +11,10 @@ resource "aws_cloudwatch_log_group" "log_group_put" {
   name = "/aws/lambda/products_put"
 }
 
+resource "aws_cloudwatch_log_group" "product_stream_processor" {
+  name = "/aws/lambda/product_stream_processor"
+}
+
 # allow lambda to log to cloudwatch
 data "aws_iam_policy_document" "cloudwatch_log_group_access_document" {
   statement {

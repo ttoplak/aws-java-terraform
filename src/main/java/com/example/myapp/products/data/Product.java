@@ -13,7 +13,18 @@ public class Product {
 
     public Product() {}
 
+    public Product(String productID, String name, Integer price, String pictureURL) {
+        this.productID = productID;
+        this.name = name;
+        this.price = price;
+        this.pictureURL = pictureURL;
+    }
 
+    public Product(String name, Integer price, String pictureURL) {
+        this.name = name;
+        this.price = price;
+        this.pictureURL = pictureURL;
+    }
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("ProductId")

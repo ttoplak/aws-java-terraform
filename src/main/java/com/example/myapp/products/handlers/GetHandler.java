@@ -8,7 +8,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.example.myapp.products.data.Product;
 import com.example.myapp.products.services.ProductService;
-import com.example.myapp.products.utility.Logging;
+import com.example.myapp.products.utility.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
@@ -19,16 +19,31 @@ public class GetHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
 
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+    ProductService productService;
+
+    public GetHandler() {
+        this.productService = new ProductService();
+    }
+
+    public GetHandler(ProductService productService) {
+        this.productService = productService;
+    }
+
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context) {
-        Logging.log(event, context);
+        logEvent(event, context);
         return processEvent();
+    }
+
+    private void logEvent(APIGatewayProxyRequestEvent event, Context context) {
+        Logger logger = new Logger(context);
+        logger.log(event);
     }
 
     private APIGatewayProxyResponseEvent processEvent() {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         try {
-            List<Product> products = ProductService.getProducts();
+            List<Product> products = productService.getProducts();
             response.withStatusCode(200).withBody(gson.toJson(products));
         } catch (DynamoDbException ddbException) {
             response.withStatusCode(500).withBody(ddbException.getMessage());

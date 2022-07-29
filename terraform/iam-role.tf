@@ -39,7 +39,8 @@ resource "aws_iam_policy" "iam_policy_for_lambda" {
           "logs:PutLogEvents",
           "xray:PutTelemetryRecords",
           "xray:PutTraceSegments",
-          "dynamodb:*"
+          "dynamodb:*",
+          "s3:*"
         ],
         "Resource": "*"
       }
