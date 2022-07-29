@@ -11,13 +11,13 @@ pipeline {
         stage('Building') {
             steps {
                 echo '=== Building ==='
-                sh 'mvn -B -DskipTests clean package'
+                bat 'mvn -B -DskipTests clean package'
             }
         }
         stage('Unit Testing') {
             steps {
                 echo '=== Unit Testing ==='
-                sh 'mvn test'
+                bat 'mvn test'
             }
             post {
                 always {
@@ -28,7 +28,7 @@ pipeline {
         stage('Integration Testing') {
             steps {
                 echo '=== Integration Testing ==='
-                sh 'mvn failsafe:integration-test'
+                bat 'mvn failsafe:integration-test'
             }
         }
     }
