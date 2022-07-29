@@ -42,7 +42,15 @@ pipeline {
         stage('Deploying code') {
             steps {
                 echo '=== Deploying to AWS ==='
-                bat 'terraform apply --auto-approve'
+                withCredentials([[
+                                         $class           : 'AmazonWebServicesCredentialsBinding',
+                                         credentialsId    : 'a88038e1-d328-4aaa-af47-1efd1717e0d3',
+                                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                                 ]]) {
+                    bat 'terraform apply --auto-approve'
+                }
+
             }
         }
     }
