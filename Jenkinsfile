@@ -3,6 +3,7 @@ pipeline {
     tools {
         jdk 'jdk-11.0.2'
         maven 'Maven 3.8.6'
+        terraform 'terraform-1.2.5'
     }
     triggers {
         pollSCM "H/02 * * * *"
