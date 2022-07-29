@@ -34,14 +34,14 @@ pipeline {
         stage('Initialize & validate IaC') {
             steps {
                 echo '=== Validating IaC ==='
-                bat 'tf init'
-                bat 'tf validate'
+                bat 'terraform init'
+                bat 'terraform validate'
             }
         }
         stage('Deploying code') {
             steps {
                 echo '=== Deploying to AWS ==='
-                bat 'tf apply'
+                bat 'terraform apply --auto-approve'
             }
         }
     }
