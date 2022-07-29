@@ -46,7 +46,7 @@ public class PostHandler implements RequestHandler<APIGatewayProxyRequestEvent, 
         try {
             Product product = gson.fromJson(event.getBody(), Product.class);
             product = productService.createProduct(product);
-            response.withStatusCode(200).withBody(gson.toJson(product));
+            response.withStatusCode(201).withBody(gson.toJson(product));
         } catch (DynamoDbException ddbException) {
             response.withStatusCode(500).withBody(ddbException.getMessage());
         } catch (InvalidObjectException objectException) {

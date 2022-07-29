@@ -58,7 +58,7 @@ public class PostHandlerTest {
 
         APIGatewayProxyResponseEvent result = handler.handleRequest(requestEvent, contextMock);
 
-        Assertions.assertEquals(200, result.getStatusCode());
+        Assertions.assertEquals(201, result.getStatusCode());
         Assertions.assertEquals(gson.toJson(product), result.getBody());
     }
 
