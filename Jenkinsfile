@@ -4,6 +4,7 @@ pipeline {
         jdk 'jdk-11.0.2'
         maven 'Maven 3.8.6'
         terraform 'terraform-1.2.5'
+        node 'node-16.16.0'
     }
     triggers {
         pollSCM "H/02 * * * *"
@@ -50,7 +51,12 @@ pipeline {
                                  ]]) {
                     bat 'terraform apply --auto-approve'
                 }
-
+            }
+        }
+        stage('E2E test deployed code') {
+            steps {
+                echo '=== E2E testing AWS code ==='
+                bat 'newman run AWS_Playground.postman_collection.json'
             }
         }
     }
