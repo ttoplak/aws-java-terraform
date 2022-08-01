@@ -13,7 +13,6 @@ pipeline {
         stage ('Install npm packages') {
             steps {
                 bat 'npm install'
-                bat 'npx newman run AWS_Playground.postman_collection.json'
             }
         }
         stage('Building') {
