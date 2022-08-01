@@ -10,11 +10,14 @@ pipeline {
         pollSCM "H/02 * * * *"
     }
     stages {
+        stage ('Install npm packages') {
+            steps {
+                bat 'npm install'
+                bat 'newman'
+            }
+        }
         stage('Building') {
             steps {
-                bat 'npm list -g'
-                bat 'npm install newman'
-                bat 'newman'
                 echo '=== Building ==='
                 bat 'mvn -B -DskipTests clean package'
             }

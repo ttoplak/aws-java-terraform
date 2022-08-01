@@ -121,3 +121,7 @@ terraform.rc
 .terraform.lock.hcl
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,maven,terraform
+
+# npm
+package-lock.json
+node_modules/**
