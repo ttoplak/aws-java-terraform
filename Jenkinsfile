@@ -13,7 +13,7 @@ pipeline {
         stage ('Install npm packages') {
             steps {
                 bat 'npm install'
-                bat 'newman'
+                bat 'npx newman'
             }
         }
         stage('Building') {
