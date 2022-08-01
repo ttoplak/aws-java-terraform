@@ -13,7 +13,7 @@ pipeline {
         stage ('Install npm packages') {
             steps {
                 bat 'npm install'
-                bat 'npx newman'
+                bat 'npx newman run AWS_Playground.postman_collection.json'
             }
         }
         stage('Building') {
@@ -62,7 +62,7 @@ pipeline {
         stage('E2E test deployed code') {
             steps {
                 echo '=== E2E testing AWS code ==='
-                bat 'newman run AWS_Playground.postman_collection.json'
+                bat 'npx newman run AWS_Playground.postman_collection.json'
             }
         }
     }
