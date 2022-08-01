@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage('Building') {
             steps {
+                echo 'npm list -g'
                 echo '=== Building ==='
                 bat 'mvn -B -DskipTests clean package'
             }
@@ -56,7 +57,6 @@ pipeline {
         stage('E2E test deployed code') {
             steps {
                 echo '=== E2E testing AWS code ==='
-                bat 'npm install -g newman'
                 bat 'newman run AWS_Playground.postman_collection.json'
             }
         }
