@@ -13,6 +13,7 @@ pipeline {
         stage('Building') {
             steps {
                 bat 'npm list -g'
+                bat 'newman'
                 echo '=== Building ==='
                 bat 'mvn -B -DskipTests clean package'
             }
