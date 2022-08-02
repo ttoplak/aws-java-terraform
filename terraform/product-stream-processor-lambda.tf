@@ -35,7 +35,6 @@ resource "aws_sqs_queue" "product_stream_processor_results_queue" {
 resource "aws_sqs_queue" "terraform_queue_deadletter" {
   name = "terraform-example-deadletter-queue"
   redrive_allow_policy = jsonencode({
-    redrivePermission = "byQueue",
-    sourceQueueArns   = [aws_sqs_queue.product_stream_processor_results_queue.arn]
+    redrivePermission = "allowAll",
   })
 }
