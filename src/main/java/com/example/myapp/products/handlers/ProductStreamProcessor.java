@@ -40,12 +40,13 @@ public class ProductStreamProcessor implements RequestHandler<DynamodbEvent, Voi
     public ProductStreamProcessor() {
         this.imageService = new ImageService();
         this.s3Service = new S3Service();
+        this.sqsService = new SQSService();
     }
 
     public ProductStreamProcessor(ImageService imageService, S3Service s3Service, SQSService sqsService) {
         this.imageService = imageService;
         this.s3Service = s3Service;
-        this.sqsService = new SQSService();
+        this.sqsService = sqsService;
     }
 
     @Override
