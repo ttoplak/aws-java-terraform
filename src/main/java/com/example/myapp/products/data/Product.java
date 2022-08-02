@@ -1,8 +1,11 @@
 package com.example.myapp.products.data;
 
+import com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+
+import java.util.Map;
 
 @DynamoDbBean
 public class Product {
@@ -71,5 +74,14 @@ public class Product {
                 ", price=" + price +
                 ", pictureURL='" + pictureURL + '\'' +
                 '}';
+    }
+
+    public static Product fromImage(Map<String, AttributeValue> image) {
+        Product product = new Product();
+        product.setProductID(image.get("ProductID").getS());
+        product.setName(image.get("Name").getS());
+        product.setPrice(Integer.parseInt(image.get("Price").getN()));
+        product.setPictureURL(image.get("PictureURL").getS());
+        return product;
     }
 }
