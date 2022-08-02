@@ -78,7 +78,7 @@ public class Product {
 
     public static Product fromImage(Map<String, AttributeValue> image) {
         Product product = new Product();
-        product.setProductID(image.get("ProductID").getS());
+        product.setProductID(image.get("ProductId").getS());
         product.setName(image.get("Name").getS());
         product.setPrice(Integer.parseInt(image.get("Price").getN()));
         product.setPictureURL(image.get("PictureURL").getS());
