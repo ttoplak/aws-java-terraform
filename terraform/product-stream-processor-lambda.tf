@@ -19,3 +19,23 @@ resource "aws_lambda_event_source_mapping" "product-stream-processor-mapping" {
   batch_size        = 1
   starting_position = "LATEST"
 }
+
+resource "aws_sqs_queue" "product_stream_processor_results_queue" {
+  name                      = "product-stream-processor-results-queue"
+  delay_seconds             = 90
+  max_message_size          = 2048
+  message_retention_seconds = 86400
+  receive_wait_time_seconds = 10
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.terraform_queue_deadletter.arn
+    maxReceiveCount     = 4
+  })
+}
+
+resource "aws_sqs_queue" "terraform_queue_deadletter" {
+  name = "terraform-example-deadletter-queue"
+  redrive_allow_policy = jsonencode({
+    redrivePermission = "byQueue",
+    sourceQueueArns   = [aws_sqs_queue.product_stream_processor_results_queue.arn]
+  })
+}

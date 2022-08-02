@@ -9,6 +9,7 @@ import com.example.myapp.products.data.Product;
 import com.example.myapp.products.services.ImageService;
 import com.example.myapp.products.services.ProductService;
 import com.example.myapp.products.services.S3Service;
+import com.example.myapp.products.services.SQSService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -26,20 +27,25 @@ import java.util.Map;
 
 public class ProductStreamProcessor implements RequestHandler<DynamodbEvent, Void> {
 
+    public static final String RESULTS_QUEUE = "product-stream-processor-results-queue";
+
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     ImageService imageService;
 
     S3Service s3Service;
 
+    SQSService sqsService;
+
     public ProductStreamProcessor() {
         this.imageService = new ImageService();
         this.s3Service = new S3Service();
     }
 
-    public ProductStreamProcessor(ImageService imageService, S3Service s3Service) {
+    public ProductStreamProcessor(ImageService imageService, S3Service s3Service, SQSService sqsService) {
         this.imageService = imageService;
         this.s3Service = s3Service;
+        this.sqsService = new SQSService();
     }
 
     @Override
@@ -59,14 +65,15 @@ public class ProductStreamProcessor implements RequestHandler<DynamodbEvent, Voi
     }
 
     private void process(DynamodbEvent dynamodbEvent) throws IOException {
-        String pictureURL = extractPictureURL(dynamodbEvent);
-        ImageService.Image image = imageService.downloadImage(pictureURL);
+        Product newProduct = extractProduct(dynamodbEvent);
+        ImageService.Image image = imageService.downloadImage(newProduct.getPictureURL());
         s3Service.uploadImageToS3(image.imageStream, image.contentLength, image.URL);
+        sqsService.sendMessage(RESULTS_QUEUE, gson.toJson(newProduct));
     }
 
-    private String extractPictureURL(DynamodbEvent dynamodbEvent) {
+    private Product extractProduct(DynamodbEvent dynamodbEvent) {
         DynamodbEvent.DynamodbStreamRecord record = dynamodbEvent.getRecords().get(0);
         Map<String, AttributeValue> newImage = record.getDynamodb().getNewImage();
-        return newImage.get("PictureURL").getS();
+        return Product.fromImage(newImage);
     }
 }
